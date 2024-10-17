@@ -5,10 +5,10 @@ import re
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from telegram import Bot
 import asyncio
-import getpass
 import os
 import pickle
 import sys
+
 # 忽略不安全的请求警告
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
@@ -21,6 +21,10 @@ bot = Bot(token=TELEGRAM_API_TOKEN)
 
 domains = ["69yun69.com"]
 
+# 账户信息，直接在代码中设置
+usernames = ["11111@11111.1", "12345678"]  # 替换为实际用户名
+# passwords = ["your_password1", "your_password2"]  # 替换为实际密码
+# 
 def update_main_code():
     """通过 HTTPS 更新网站的最新主程序代码，重试三次"""
     url = "https://69yun69.com/download/scritps/checkin_69.py"  # 这是更新的代码的 URL
@@ -57,8 +61,6 @@ def update_main_code():
 
 # 在程序运行前进行代码更新
 update_main_code()
-
-
 
 def convert_mb_to_gb(mb_value):
     """将MB转换为GB，并保留两位小数"""
@@ -106,13 +108,8 @@ async def auto_checkin(domain, email, passwd):
     # 根据具体的 HTML 结构，定位并提取套餐级别信息
     package_level_div = soup.find('div', class_='card-body pt-2 pl-5 pr-3 pb-1')
     if package_level_div:
-        # 提取 p 标签中的文本
         package_level_text = package_level_div.find('p', class_='text-dark-50')
-        if package_level_text:
-            # 进一步处理提取出的文本，去除多余的空白字符
-            package_level = package_level_text.get_text(strip=True).split(':')[0].strip()
-        else:
-            package_level = "N/A"
+        package_level = package_level_text.get_text(strip=True).split(':')[0].strip() if package_level_text else "N/A"
     else:
         package_level = "N/A"
 
@@ -140,55 +137,7 @@ async def send_telegram_message(message):
     """发送消息到 Telegram"""
     await bot.send_message(chat_id=CHAT_ID, text=message)
 
-def load_credentials():
-    """从文件加载用户名和密码"""
-    if os.path.exists('credentials.pkl'):
-        with open('credentials.pkl', 'rb') as file:
-            return pickle.load(file)
-    return [], []
-
-def save_credentials(usernames, passwords):
-    """将用户名和密码保存到文件"""
-    with open('credentials.pkl', 'wb') as file:
-        pickle.dump((usernames, passwords), file)
-
-def update_main_code(url, max_retries=3):
-    """尝试更新主程序代码"""
-    attempt = 0
-    while attempt < max_retries:
-        try:
-            response = requests.get(url, timeout=10)
-            if response.status_code == 200:
-                with open(__file__, 'wb') as file:
-                    file.write(response.content)
-                print("主程序代码已成功更新.")
-                return True
-            else:
-                print(f"更新失败，状态码: {response.status_code}")
-        except Exception as e:
-            print(f"尝试更新主程序代码时出错: {e}")
-        attempt += 1
-        print(f"第 {attempt} 次重试...")
-    print("无法更新主程序代码，继续执行本地代码.")
-    return False
-
 async def main():
-
-    usernames, passwords = load_credentials()
-
-    # 如果没有保存的用户名和密码，要求用户输入
-    if not usernames or not passwords:
-        # num_accounts = int(input("请输入账户数量: "))
-        num_accounts = 1
-        for i in range(num_accounts):
-            # username = input(f"请输入第 {i + 1} 个用户名: ")
-            username = "11111@11111.1"
-            # password = getpass.getpass(prompt=f"请输入第 {i + 1} 个密码: ")
-            password = '12345678'
-            usernames.append(username)
-            passwords.append(password)
-        save_credentials(usernames, passwords)
-
     for i in range(len(usernames)):
         for domain in domains:
             print(f"Checking in for {usernames[i]} with domain {domain}")
