@@ -1,0 +1,26 @@
+name: checkin_69_auto
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # 每小时执行一次（UTC时间）
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # 使用指定版本的 Python
+
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4 python-telegram-bot asyncio  # 安装所需库
+
+    - name: Run Python script
+      run: |
+        python checkin_69.py  # 替换为你的 Python 脚本名称
