@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Python script
       run: |
-        python checkin_69.py  # 替换为你的 Python 脚本名称
+        python checkin_69_auto.py  # 替换为你的 Python 脚本名称
