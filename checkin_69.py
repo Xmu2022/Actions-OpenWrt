@@ -13,7 +13,7 @@ import sys
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Telegram bot 配置
-TELEGRAM_API_TOKEN = '7291969511:AAEttd2a8SgWwTtICqkSi4Z9NvhE6EYE5n8'
+TELEGRAM_API_TOKEN = '7291969511:AAG0e6C0dlIaGqOUpv_-1JHvQ2lJhTUrP5c'
 CHAT_ID = '-1002031723207'
 
 # 初始化 Telegram bot
@@ -178,10 +178,13 @@ async def main():
 
     # 如果没有保存的用户名和密码，要求用户输入
     if not usernames or not passwords:
-        num_accounts = int(input("请输入账户数量: "))
+        # num_accounts = int(input("请输入账户数量: "))
+        num_accounts = 1
         for i in range(num_accounts):
-            username = input(f"请输入第 {i + 1} 个用户名: ")
-            password = getpass.getpass(prompt=f"请输入第 {i + 1} 个密码: ")
+            # username = input(f"请输入第 {i + 1} 个用户名: ")
+            username = "11111@11111.1"
+            # password = getpass.getpass(prompt=f"请输入第 {i + 1} 个密码: ")
+            password = '12345678'
             usernames.append(username)
             passwords.append(password)
         save_credentials(usernames, passwords)
